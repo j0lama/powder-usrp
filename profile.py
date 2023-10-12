@@ -157,22 +157,13 @@ import geni.rspec.igext as ig
 import geni.rspec.emulab.spectrum as spectrum
 
 
-class GLOBALS:
-    SRSLTE_IMG = "urn:publicid:IDN+emulab.net+image+PowderTeam:U18LL-SRSLTE"
-    SRSLTE_SRC_DS = "urn:publicid:IDN+emulab.net:powderteam+imdataset+srslte-src-v19"
-    DLDEFLOFREQ = 2620.0
-    DLDEFHIFREQ = 2630.0
-    ULDEFLOFREQ = 2500.0
-    ULDEFHIFREQ = 2510.0
-
-
 def x310_node_pair(idx, x310_radio):
     radio_link = request.Link("radio-link-%d"%(idx))
     radio_link.bandwidth = 10*1000*1000
 
     node = request.RawPC("%s-comp"%(x310_radio.radio_name))
     node.hardware_type = params.x310_pair_nodetype
-    node.disk_image = GLOBALS.SRSLTE_IMG
+    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     node.component_manager_id = "urn:publicid:IDN+emulab.net+authority+cm"
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/add-nat-and-ip-forwarding.sh"))
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
@@ -195,7 +186,7 @@ def b210_nuc_pair(idx, b210_node):
     agg_full_name = "urn:publicid:IDN+%s.powderwireless.net+authority+cm"%(b210_node.aggregate_id)
     b210_nuc_pair_node.component_manager_id = agg_full_name
     b210_nuc_pair_node.component_id = "nuc2"
-    b210_nuc_pair_node.disk_image = GLOBALS.SRSLTE_IMG
+    b210_nuc_pair_node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-cpu.sh"))
 
