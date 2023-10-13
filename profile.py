@@ -1,19 +1,6 @@
 #!/usr/bin/python
 
-"""This profile allows the allocation of resources for over-the-air operation on
-the POWDER platform. Specifically, the profile has options to request the
-allocation of software defined radios (SDRs) in rooftop base-stations and
-fixed-endpoints (i.e., nodes deployed at human height).
-
-*IMPORTANT NOTE:* Due to the ongoing volatility with spectrum access
-for outdoor over the air resouces at POWDER, this profile may not work
-well or at all.  Originally this profile targeted band 7 and POWDER
-radios had maching band 7 RF front-ends to provide the necessary SNR
-for 4G/5G communications. POWDER no longer has access to band 7 due to
-3rd party incumbents. Please ask on the POWDER Users list for current
-status.
-
-Map of deployment is here:
+"""Map of deployment is here:
 https://www.powderwireless.net/map
 
 The base-station SDRs are X310s and connected to an antenna covering the
@@ -157,7 +144,7 @@ import geni.rspec.igext as ig
 import geni.rspec.emulab.spectrum as spectrum
 
 
-def x310_node_pair(idx, x310_radio):
+def x310_node_pair(idx, x310_radio, token, password):
     radio_link = request.Link("radio-link-%d"%(idx))
     radio_link.bandwidth = 10*1000*1000
 
@@ -169,6 +156,7 @@ def x310_node_pair(idx, x310_radio):
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-cpu.sh"))
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-sdr-iface.sh"))
+    node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token + " " + password))
 
     node_radio_if = node.addInterface("usrp_if")
     node_radio_if.addAddress(rspec.IPv4Address("192.168.40.1",
@@ -203,6 +191,11 @@ portal.context.defineParameter("x310_pair_nodetype",
                                portal.ParameterType.STRING,
                                node_type[0],
                                node_type)
+
+pc.defineParameter("token", "GitHub Token",
+                   portal.ParameterType.STRING, "")
+pc.defineParameter("password", "Dockerhub Password",
+                   portal.ParameterType.STRING, "")
 
 rooftop_names = [
     ("cellsdr1-browning",
@@ -285,7 +278,7 @@ portal.context.verifyParameters()
 request = portal.context.makeRequestRSpec()
 
 for i, x310_radio in enumerate(params.x310_radios):
-    x310_node_pair(i, x310_radio)
+    x310_node_pair(i, x310_radio, params.token, params.password)
 
 for i, b210_node in enumerate(params.b210_nodes):
     b210_nuc_pair(i, b210_node)
