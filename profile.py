@@ -192,9 +192,9 @@ portal.context.defineParameter("x310_pair_nodetype",
                                node_type[0],
                                node_type)
 
-pc.defineParameter("token", "GitHub Token",
+portal.context.defineParameter("token", "GitHub Token",
                    portal.ParameterType.STRING, "")
-pc.defineParameter("password", "Dockerhub Password",
+portal.context.defineParameter("password", "Dockerhub Password",
                    portal.ParameterType.STRING, "")
 
 rooftop_names = [
