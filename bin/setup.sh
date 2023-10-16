@@ -24,4 +24,4 @@ git clone https://j0lama:$1@github.com/j0lama/cell-scanner-docker.git
 # Clone ng-scope-docker
 git clone https://j0lama:$1@github.com/j0lama/ng-scope-docker.git
 
-echo "$3" | docker login -u $2 --password-stdin
+echo "$3" | docker login -u "$2" --password-stdin
