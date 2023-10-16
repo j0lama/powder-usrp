@@ -177,6 +177,7 @@ def b210_nuc_pair(idx, b210_node):
     b210_nuc_pair_node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-cpu.sh"))
+    b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token + " " + password))
 
 
 node_type = [
