@@ -15,13 +15,11 @@ sudo chmod a+r /etc/apt/keyrings/docker.gpg
 echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt install -y docker-ce
-sudo usermod -aG docker $USER
-newgrp docker
 
 # Clone cell-scanner-docker
 git clone https://j0lama:$1@github.com/j0lama/cell-scanner-docker.git
 
 # Clone ng-scope-docker
-git clone https://j0lama:$1@github.com/j0lama/ng-scope-docker.git
+git clone https://j0lama:$1@github.com/j0lama/ng-scope-docker-cosmos.git
 
-echo "$3" | docker login -u "$2" --password-stdin
+echo "$3" | sudo docker login -u "$2" --password-stdin
