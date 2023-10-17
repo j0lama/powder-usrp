@@ -144,7 +144,7 @@ import geni.rspec.igext as ig
 import geni.rspec.emulab.spectrum as spectrum
 
 
-def x310_node_pair(idx, x310_radio, token, user, password):
+def x310_node_pair(idx, x310_radio, token):
     radio_link = request.Link("radio-link-%d"%(idx))
     radio_link.bandwidth = 10*1000*1000
 
@@ -156,7 +156,7 @@ def x310_node_pair(idx, x310_radio, token, user, password):
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-cpu.sh"))
     node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-sdr-iface.sh"))
-    node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token + " " + user + " " + password))
+    node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token))
 
     node_radio_if = node.addInterface("usrp_if")
     node_radio_if.addAddress(rspec.IPv4Address("192.168.40.1",
@@ -169,7 +169,7 @@ def x310_node_pair(idx, x310_radio, token, user, password):
     radio_link.addNode(radio)
 
 
-def b210_nuc_pair(idx, b210_node, token, user, password):
+def b210_nuc_pair(idx, b210_node, token):
     b210_nuc_pair_node = request.RawPC("b210-%s-%s"%(b210_node.aggregate_id,"nuc2"))
     agg_full_name = "urn:publicid:IDN+%s.powderwireless.net+authority+cm"%(b210_node.aggregate_id)
     b210_nuc_pair_node.component_manager_id = agg_full_name
@@ -177,7 +177,7 @@ def b210_nuc_pair(idx, b210_node, token, user, password):
     b210_nuc_pair_node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/update-config-files.sh"))
     b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/tune-cpu.sh"))
-    b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token + " " + user + " " + password))
+    b210_nuc_pair_node.addService(rspec.Execute(shell="bash", command="/local/repository/bin/setup.sh " + token))
 
 
 node_type = [
@@ -194,10 +194,6 @@ portal.context.defineParameter("x310_pair_nodetype",
                                node_type)
 
 portal.context.defineParameter("token", "GitHub Token",
-                   portal.ParameterType.STRING, "")
-portal.context.defineParameter("user", "Dockerhub User",
-                   portal.ParameterType.STRING, "")
-portal.context.defineParameter("password", "Dockerhub Password",
                    portal.ParameterType.STRING, "")
 
 rooftop_names = [
@@ -281,9 +277,9 @@ portal.context.verifyParameters()
 request = portal.context.makeRequestRSpec()
 
 for i, x310_radio in enumerate(params.x310_radios):
-    x310_node_pair(i, x310_radio, params.token, params.user, params.password)
+    x310_node_pair(i, x310_radio, params.token)
 
 for i, b210_node in enumerate(params.b210_nodes):
-    b210_nuc_pair(i, b210_node, params.token, params.user, params.password)
+    b210_nuc_pair(i, b210_node, params.token)
     
 portal.context.printRequestRSpec()

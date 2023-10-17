@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
-    echo "USE: $0 <GitHub Token> <Dockerhub User> <Dockerhub Password>"
+if [ "$#" -ne 1 ]; then
+    echo "USE: $0 <GitHub Token>"
     exit 1
 fi
 
@@ -19,5 +19,3 @@ git clone https://j0lama:$1@github.com/j0lama/cell-scanner-docker.git
 
 # Clone ng-scope-docker
 git clone https://j0lama:$1@github.com/j0lama/ng-scope-docker-cosmos.git
-
-echo "$3" | sudo docker login -u "$2" --password-stdin
